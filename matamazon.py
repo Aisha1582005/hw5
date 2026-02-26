@@ -290,7 +290,14 @@ class MatamazonSystem:
         # TODO implement this method as instructed
         pass
 
-    def export_system_to_file(self, path):
+   def export_system_to_file(self, path):
+    with open(path, "w") as f:
+        for customer in self.customers.values():
+            print(customer, file=f)
+        for supplier in self.suppliers.values():
+            print(supplier, file=f)
+        for product in self.products.values():
+            print(product, file=f)
         """
         Export system state (customers, suppliers, products) to a text file.
 
