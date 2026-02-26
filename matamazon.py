@@ -168,23 +168,16 @@ class MatamazonSystem:
         pass
 
     def place_order(self, customer_id, product_id, quantity=1):
-
     if product_id not in self.products:
         return "The product does not exist in the system"
-
     product = self.products[product_id]
-
     if quantity > product.quantity:
         return "The quantity requested for this product is greater than the quantity in stock"
-
     total_price = product.price * quantity
     order = Order(self._next_order_id, customer_id, product_id, quantity, total_price)
-
     self.orders[self._next_order_id] = order
     self._next_order_id += 1
-
     product.quantity -= quantity
-
     return "The order has been accepted in the system"
         
         """
@@ -217,58 +210,38 @@ class MatamazonSystem:
         pass
 
    def remove_object(self, _id, class_type):
-
     if not isinstance(_id, int) or _id < 0:
         raise InvalidIdException("Invalid id")
-
     class_type = class_type.strip()
-
     if class_type == "Order":
-
         if _id not in self.orders:
             raise InvalidIdException("Order does not exist")
-
         order = self.orders[_id]
         product = self.products[order.product_id]
         product.quantity += order.quantity
-
         del self.orders[_id]
-
         return order.quantity
-
     elif class_type == "Product":
-
         if _id not in self.products:
             raise InvalidIdException("Product does not exist")
-
         for order in self.orders.values():
             if order.product_id == _id:
                 raise InvalidIdException("Product has dependent orders")
-
         del self.products[_id]
-
     elif class_type == "Customer":
-
         if _id not in self.customers:
             raise InvalidIdException("Customer does not exist")
-
         for order in self.orders.values():
             if order.customer_id == _id:
                 raise InvalidIdException("Customer has dependent orders")
-
         del self.customers[_id]
-
     elif class_type == "Supplier":
-
         if _id not in self.suppliers:
             raise InvalidIdException("Supplier does not exist")
-
         for product in self.products.values():
             if product.supplier_id == _id:
                 raise InvalidIdException("Supplier has dependent products")
-
         del self.suppliers[_id]
-
     else:
         raise InvalidIdException("Invalid class type")
         """
@@ -294,7 +267,13 @@ class MatamazonSystem:
         # TODO implement this method as instructed
         pass
 
-    def search_products(self, query, max_price=None):
+   def search_products(self, query, max_price=None):
+    result = []
+    for product in self.products.values():
+        if product.quantity != 0 and query.lower() in product.name.lower():
+            if max_price is None or product.price <= max_price:
+                result.append(product)
+    return sorted(result, key=lambda p: p.price)
         """
         Search products by query in the product name, and optionally filter by max_price.
 
