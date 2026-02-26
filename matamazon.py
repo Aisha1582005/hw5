@@ -216,7 +216,61 @@ class MatamazonSystem:
         # TODO implement this method as instructed
         pass
 
-    def remove_object(self, _id, class_type):
+   def remove_object(self, _id, class_type):
+
+    if not isinstance(_id, int) or _id < 0:
+        raise InvalidIdException("Invalid id")
+
+    class_type = class_type.strip()
+
+    if class_type == "Order":
+
+        if _id not in self.orders:
+            raise InvalidIdException("Order does not exist")
+
+        order = self.orders[_id]
+        product = self.products[order.product_id]
+        product.quantity += order.quantity
+
+        del self.orders[_id]
+
+        return order.quantity
+
+    elif class_type == "Product":
+
+        if _id not in self.products:
+            raise InvalidIdException("Product does not exist")
+
+        for order in self.orders.values():
+            if order.product_id == _id:
+                raise InvalidIdException("Product has dependent orders")
+
+        del self.products[_id]
+
+    elif class_type == "Customer":
+
+        if _id not in self.customers:
+            raise InvalidIdException("Customer does not exist")
+
+        for order in self.orders.values():
+            if order.customer_id == _id:
+                raise InvalidIdException("Customer has dependent orders")
+
+        del self.customers[_id]
+
+    elif class_type == "Supplier":
+
+        if _id not in self.suppliers:
+            raise InvalidIdException("Supplier does not exist")
+
+        for product in self.products.values():
+            if product.supplier_id == _id:
+                raise InvalidIdException("Supplier has dependent products")
+
+        del self.suppliers[_id]
+
+    else:
+        raise InvalidIdException("Invalid class type")
         """
         Remove an object from the system by ID and type.
 
