@@ -168,6 +168,25 @@ class MatamazonSystem:
         pass
 
     def place_order(self, customer_id, product_id, quantity=1):
+
+    if product_id not in self.products:
+        return "The product does not exist in the system"
+
+    product = self.products[product_id]
+
+    if quantity > product.quantity:
+        return "The quantity requested for this product is greater than the quantity in stock"
+
+    total_price = product.price * quantity
+    order = Order(self._next_order_id, customer_id, product_id, quantity, total_price)
+
+    self.orders[self._next_order_id] = order
+    self._next_order_id += 1
+
+    product.quantity -= quantity
+
+    return "The order has been accepted in the system"
+        
         """
         Place an order for a product by a customer.
 
