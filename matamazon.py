@@ -349,6 +349,23 @@ class MatamazonSystem:
 
 
 def load_system_from_file(path):
+    system = MatamazonSystem()
+    with open(path, "r") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                obj = eval(line)
+                if isinstance(obj, Customer):
+                    system.customers[obj.id] = obj
+                elif isinstance(obj, Supplier):
+                    system.suppliers[obj.id] = obj
+                elif isinstance(obj, Product):
+                    system.products[obj.id] = obj
+            except SyntaxError:
+                continue
+    return system
     """
     Load a MatamazonSystem from an input file.
 
