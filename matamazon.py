@@ -315,7 +315,16 @@ class MatamazonSystem:
         # TODO implement this method as instructed
         pass
 
-    def export_orders(self, out_file):
+   def export_orders(self, out_file):
+    data = {}
+    for order in self.orders.values():
+        product = self.products[order.product_id]
+        supplier = self.suppliers[product.supplier_id]
+        city = supplier.city
+        if city not in data:
+            data[city] = []
+        data[city].append(str(order))
+    json.dump(data, out_file)
         """
         Export orders in JSON format grouped by origin city.
 
