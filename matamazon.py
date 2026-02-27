@@ -348,13 +348,13 @@ if __name__ == "__main__":
         print("Usage: python3 matamazon.py -l < matamazon_log > -s < matamazon_system > -o "
               "<output_file> -os <out_matamazon_system>", file=sys.stderr)
         sys.exit(1)
-try:
-    if arguments.s:
+    try:
+      if arguments.s:
         loaded_system = load_system_from_file(arguments.s)
-    else:
+      else:
         loaded_system = load_system_from_file()
 
-    with open(arguments.l, "r") as log:
+      with open(arguments.l, "r") as log:
         for line in log:
             line = line.strip()
             if not line:
@@ -389,25 +389,33 @@ try:
                 product_id = int(line[2])
                 if len(line) > 3:
                     quantity = int(line[3])
-                loaded_system.place_order(customer_id, product_id, quantity)
+                else:
+                    quantity = 1
+                order = Order(customer_id, product_id, quantity)
+                to_print = loaded_system.place_order(customer_id, product_id, quantity)
+                print(to_print)
             elif input == "remove":
                 class_type = line[1]
                 id = int(line[2])
-                loaded_system.remove_object(class_type, id)
+                loaded_system.remove_object(id, class_type,)
             elif input == "search":
                 query = line[1]
                 if len(line) > 2:
                     max_price = int(line[2])
-                    loaded_system.search_products(query, max_price)
+                    to_print = loaded_system.search_products(query, max_price)
                 else:
-                    loaded_system.search_products(query)
+                    to_print = loaded_system.search_products(query)
+                for item in to_print:
+                    print(item)
 
-    if arguments.o:
-        loaded_system.export_orders(arguments.o)
+      if arguments.o:
+           loaded_system.export_orders(arguments.o)
+      else:
+          loaded_system.export_orders(sys.stdout)
 
-    if arguments.os:
-        loaded_system.export_system_to_file(arguments.os)
+      if arguments.os:
+           loaded_system.export_system_to_file(arguments.os)
 
-except:
-    print("The matamazon script has encountered an error", file=sys.stderr)
-    sys.exit(1)
+    except:
+       print("The matamazon script has encountered an error", file=sys.stderr)
+       sys.exit(1)
