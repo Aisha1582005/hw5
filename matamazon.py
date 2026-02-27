@@ -397,7 +397,7 @@ if __name__ == "__main__":
             elif input == "remove":
                 class_type = line[1]
                 id = int(line[2])
-                loaded_system.remove_object(id, class_type,)
+                loaded_system.remove_object(id, class_type)
             elif input == "search":
                 query = line[1]
                 if len(line) > 2:
@@ -416,6 +416,6 @@ if __name__ == "__main__":
       if arguments.os:
            loaded_system.export_system_to_file(arguments.os)
 
-    except:
-       print("The matamazon script has encountered an error", file=sys.stderr)
+    except Exception as e:
+       print("The matamazon script has encountered an error",e, file=sys.stderr)
        sys.exit(1)
