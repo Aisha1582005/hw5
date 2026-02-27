@@ -113,19 +113,16 @@ class MatamazonSystem:
         pass
 
     def register_entity(self, entity, is_customer):
-        """
-        Register a Customer or Supplier in the system.
+        if is_customer:
+            if entity.id in self.customers:
+                raise InvalidIdException("Customer already exists")
 
-        Args:
-            entity: A Customer or Supplier object.
-            is_customer (bool): True if entity is Customer, False if entity is Supplier.
+            self.customers[entity.id] = entity
+        else:
+            if entity.id in self.suppliers:
+                raise InvalidIdException("Customer already exists")
 
-        Raises:
-            InvalidIdException:
-                - If the entity ID is invalid.
-                - If the entity ID already exists in the system (note: IDs must be unique across
-                  customers AND suppliers).
-        """
+            self.suppliers[entity.id] = entity
         # TODO implement this method as instructed
         pass
 
