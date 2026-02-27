@@ -5,6 +5,10 @@ import json
 class InvalidIdException(Exception):
     pass
 
+
+class InvalidPriceException(Exception):
+    pass
+
 class Customer:
 
     class Customer:
@@ -39,53 +43,26 @@ class Supplier:
 
 
 class Product:
-    """
-    Represents a product sold on the Matamazon website.
 
-    Required fields (per specification):
-        - id (int): Unique non-negative integer identifier.
-        - name (str): Product name.
-        - price (float): Non-negative price.
-        - supplier_id (int): ID of the supplier that provides the product.
-        - quantity (int): Non-negative quantity in stock.
-
-    Exceptions:
-        InvalidIdException:
-            - If id/supplier_id/quantity is invalid per specification.
-        InvalidPriceException:
-            - If price is invalid (e.g., negative).
-
-    Printing:
-        Must support printing in the following format (example):
-            Product(id=101, name='Harry Potter Cushion', price=29.99, supplier_id=42, quantity=555)
-    """
 
     # TODO implement this class as instructed
     pass
 
 
 class Order:
-    """
-    Represents a placed order.
+    def __init__(self, id, name, price, supplier_id, quantity):
+        if id < 0 or not isinstance(id, int) or not isinstance(supplier_id, int) or supplier_id < 0:
+            raise InvalidIdException("Id is not legal")
+        if (price < 0):
+            raise InvalidPriceException("price is negative")
+        self.id = id
+        self.name = name
+        self.price = price
+        self.supplier_id = supplier_id
+        self.quantity = quantity
 
-    Required fields (per specification):
-        - id (int): Unique non-negative integer identifier (assigned by the system).
-        - customer_id (int): ID of the customer who placed the order.
-        - product_id (int): ID of the ordered product.
-        - quantity (int): Ordered quantity (non-negative integer).
-        - total_price (float): Total price for the order (non-negative).
-
-    Exceptions:
-        InvalidIdException:
-            - If one of the ID fields is invalid.
-        InvalidPriceException:
-            - If total_price is invalid.
-
-    Printing:
-        Must support printing in the following format (example):
-            Order(id=1, customer_id=42, product_id=101, quantity=10, total_price=299.9)
-
-    """
+    def __str__(self):
+        return "Product(id={self.id}, name='{self.name}', price='{self.price}', supplier_id='{self.supplier_id}', quantity='{self.quantity}')"
 
     # TODO implement this class as instructed
     pass
