@@ -142,9 +142,10 @@ class MatamazonSystem:
         if not isinstance(id, int) or id < 0:
             raise InvalidIdException("Invalid id")
 
-        class_type = class_type.strip()
+        class_type = class_type.strip().lower()
 
-        if class_type == "Order":
+
+        if class_type == "order":
             if id not in self.orders:
                 raise InvalidIdException("Order does not exist")
             order = self.orders[id]
@@ -153,7 +154,7 @@ class MatamazonSystem:
             del self.orders[id]
             return order.quantity
 
-        elif class_type == "Product":
+        elif class_type == "product":
             if id not in self.products:
                 raise InvalidIdException("Product does not exist")
             for order in self.orders.values():
@@ -161,7 +162,7 @@ class MatamazonSystem:
                     raise InvalidIdException("Product has dependent orders")
             del self.products[id]
 
-        elif class_type == "Customer":
+        elif class_type == "customer":
             if id not in self.customers:
                 raise InvalidIdException("Customer does not exist")
             for order in self.orders.values():
@@ -170,7 +171,7 @@ class MatamazonSystem:
 
             del self.customers[id]
 
-        elif class_type == "Supplier":
+        elif class_type == "supplier":
             if id not in self.suppliers:
                 raise InvalidIdException("Supplier does not exist")
             for product in self.products.values():
