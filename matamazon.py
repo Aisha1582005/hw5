@@ -101,7 +101,7 @@ class MatamazonSystem:
             self.customers[entity.id] = entity
         else:
             if entity.id in self.suppliers:
-                raise InvalidIdException("Customer already exists")
+                raise InvalidIdException("Supplier already exists")
 
             self.suppliers[entity.id] = entity
         # TODO implement this method as instructed
@@ -259,11 +259,15 @@ class MatamazonSystem:
             product = self.products[order.product_id]
             supplier = self.suppliers[product.supplier_id]
             city = supplier.city
+            order = str(order)
             if city not in data:
                 data[city] = []
             data[city].append(str(order))
-        with open(out_file, "w") as file:
-            json.dump(data, file)
+        if hasattr(out_file, "write"):
+                json.dump(data, out_file)
+        else:
+            with open(out_file, "w") as file:
+             json.dump(data, file)
 
     """
     Export orders in JSON format grouped by origin city.
@@ -291,8 +295,7 @@ def load_system_from_file(path=None):
     system = MatamazonSystem()
     if path is None:
         return system
-    try:
-      with open(path, "r") as f:
+    with open(path, "r") as f:
         for line in f:
            line = line.strip()
            if not line:
@@ -306,9 +309,7 @@ def load_system_from_file(path=None):
               elif isinstance(obj, Product):
                system.products[obj.id] = obj
            except (SyntaxError, NameError, TypeError):
-              continue
-    except FileNotFoundError:
-      pass
+                continue
     return system
     """
     Load a MatamazonSystem from an input file.
@@ -391,7 +392,6 @@ if __name__ == "__main__":
                     quantity = int(line[3])
                 else:
                     quantity = 1
-                order = Order(customer_id, product_id, quantity)
                 to_print = loaded_system.place_order(customer_id, product_id, quantity)
                 print(to_print)
             elif input == "remove":
