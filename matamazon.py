@@ -54,7 +54,7 @@ class Product:
         self.quantity = quantity
 
     def __str__(self):
-        return f"Product(id={self.id}, name='{self.name}', price='{self.price}', supplier_id='{self.supplier_id}', quantity='{self.quantity}')"
+        return f"Product(id={self.id}, name='{self.name}', price={self.price}, supplier_id={self.supplier_id}, quantity={self.quantity})"
 
     # TODO implement this class as instructed
     pass
