@@ -191,37 +191,45 @@ class MatamazonSystem:
 
         if not isinstance(id, int) or id < 0:
             raise InvalidIdException("Invalid id")
-    class_type = class_type.strip()
-    if class_type == "Order":
-        if id not in self.orders:
-            raise InvalidIdException("Order does not exist")
-        order = self.orders[id]
-        product = self.products[order.product_id]
-        product.quantity += order.quantity
-        del self.orders[id]
-    elif class_type == "Product":
-        if id not in self.products:
-            raise InvalidIdException("Product does not exist")
-        for order in self.orders.values():
-            if order.product_id == id:
-                raise InvalidIdException("Product has dependent orders")
-        del self.products[id]
-    elif class_type == "Customer":
-        if id not in self.customers:
-            raise InvalidIdException("Customer does not exist")
-        for order in self.orders.values():
-            if order.customer_id == id:
-                raise InvalidIdException("Customer has dependent orders")
-        del self.customers[_id]
-    elif class_type == "Supplier":
-        if id not in self.suppliers:
-            raise InvalidIdException("Supplier does not exist")
-        for product in self.products.values():
-            if product.supplier_id == id:
-                raise InvalidIdException("Supplier has dependent products")
-        del self.suppliers[id]
-    else:
-        raise InvalidIdException("Invalid class type")
+
+        class_type = class_type.strip()
+
+        if class_type == "Order":
+            if id not in self.orders:
+                raise InvalidIdException("Order does not exist")
+            order = self.orders[id]
+            product = self.products[order.product_id]
+            product.quantity += order.quantity
+            del self.orders[id]
+            return order.quantity
+
+        elif class_type == "Product":
+            if id not in self.products:
+                raise InvalidIdException("Product does not exist")
+            for order in self.orders.values():
+                if order.product_id == id:
+                    raise InvalidIdException("Product has dependent orders")
+            del self.products[id]
+
+        elif class_type == "Customer":
+            if id not in self.customers:
+                raise InvalidIdException("Customer does not exist")
+            for order in self.orders.values():
+                if order.customer_id == id:
+                    raise InvalidIdException("Customer has dependent orders")
+           
+            del self.customers[id]
+
+        elif class_type == "Supplier":
+            if id not in self.suppliers:
+                raise InvalidIdException("Supplier does not exist")
+            for product in self.products.values():
+                if product.supplier_id == id:
+                    raise InvalidIdException("Supplier has dependent products")
+            del self.suppliers[id]
+
+        else:
+            raise InvalidIdException("Invalid class type")
         """
         Remove an object from the system by ID and type.
 
