@@ -102,15 +102,15 @@ class MatamazonSystem:
     """
 
     def __init__(self):
-        def __init__(self):
-            self.customers = {}
-            self.suppliers = {}
-            self.products = {}
-            self.orders = {}
-            self.order_id = 1
+        self.customers = {}
+        self.suppliers = {}
+        self.products = {}
+        self.orders = {}
+        self.order_id = 1
 
         # TODO implement this method if needed
-        pass
+
+    pass
 
     def register_entity(self, entity, is_customer):
         if is_customer:
