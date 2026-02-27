@@ -199,7 +199,6 @@ class MatamazonSystem:
         product = self.products[order.product_id]
         product.quantity += order.quantity
         del self.orders[id]
-        return order.quantity
     elif class_type == "Product":
         if id not in self.products:
             raise InvalidIdException("Product does not exist")
@@ -247,13 +246,12 @@ class MatamazonSystem:
         pass
 
     def search_products(self, query, max_price=None):
-
         result = []
-    for product in self.products.values():
-        if product.quantity != 0 and query.lower() in product.name.lower():
-            if max_price is None or product.price <= max_price:
-                result.append(product)
-          return sorted(result, key=lambda p: p.price)
+        for product in self.products.values():
+            if product.quantity != 0 and query.lower() in product.name.lower():
+                if max_price is None or product.price <= max_price:
+                  result.append(product)
+        return sorted(result, key=lambda p: p.price)
     """
     Search products by query in the product name, and optionally filter by max_price.
 
