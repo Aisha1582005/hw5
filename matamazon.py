@@ -419,4 +419,4 @@ if __name__ == "__main__":
 
     except Exception as e:
        print("The matamazon script has encountered an error",e, file=sys.stderr)
-       sys.exit(1)
+       sys.exit(0)
