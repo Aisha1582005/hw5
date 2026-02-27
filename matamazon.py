@@ -43,13 +43,6 @@ class Supplier:
 
 
 class Product:
-
-
-    # TODO implement this class as instructed
-    pass
-
-
-class Order:
     def __init__(self, id, name, price, supplier_id, quantity):
         if id < 0 or not isinstance(id, int) or not isinstance(supplier_id, int) or supplier_id < 0:
             raise InvalidIdException("Id is not legal")
@@ -63,6 +56,27 @@ class Order:
 
     def __str__(self):
         return "Product(id={self.id}, name='{self.name}', price='{self.price}', supplier_id='{self.supplier_id}', quantity='{self.quantity}')"
+
+
+    # TODO implement this class as instructed
+    pass
+
+
+class Order:
+    def __init__(self, id, customer_id, product_id, quantity, total_price):
+        if (id < 0 or not isinstance(id, int) or not isinstance(customer_id, int) or
+                not isinstance(product_id, int) or customer_id < 0 or product_id < 0):
+            raise InvalidIdException("Id is not legal")
+        if total_price < 0 or not isinstance(total_price, float):
+            raise InvalidPriceException("price is negative")
+        self.id = id
+        self.customer_id = customer_id
+        self.product_id = product_id
+        self.quantity = quantity
+        self.total_price = total_price
+
+    def __str__(self):
+        return "Order({self.id}, {self.customer_id}, {self.product_id}, {self.quantity}, {self.total_price})"
 
     # TODO implement this class as instructed
     pass
