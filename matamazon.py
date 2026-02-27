@@ -84,7 +84,60 @@ class Order:
 
 class MatamazonSystem:
     # TODO implement this method as instructed
+    def __init__(self):
+        self.customers = {}
+        self.suppliers = {}
+        self.products = {}
+        self.orders = {}
+        self.order_id = 1
+
+        # TODO implement this method if needed
+
     pass
+
+    def register_entity(self, entity, is_customer):
+        if is_customer:
+            if entity.id in self.customers:
+                raise InvalidIdException("Customer already exists")
+
+            self.customers[entity.id] = entity
+        else:
+            if entity.id in self.suppliers:
+                raise InvalidIdException("Customer already exists")
+
+            self.suppliers[entity.id] = entity
+        # TODO implement this method as instructed
+        pass
+
+    def add_or_update_entity(self, entity):
+        if entity.id in self.products:
+            if self.products[entity.id].supplier_id != entity.supplier_id:
+                raise InvalidIdException("Suppliers does not match")
+            else:
+                self.products[entity.id].name = entity.name
+                self.products[entity.id].price = entity.price
+                self.products[entity.id].quantity = entity.quantity
+        else:
+            self.products[entity.id] = entity
+
+        # TODO implement this method as instructed
+
+    pass
+
+    def place_order(self, customer_id, product_id, quantity=1):
+        if customer_id not in self.customers:
+            raise InvalidIdException("Customer does not exist")
+        if product_id in self.products:
+            if self.products[product_id].quantity >= quantity:
+                self.products[product_id].quantity -= quantity
+                total_price = self.products[product_id].price * quantity
+                self.orders[self.order_id] = Order(self.order_id, customer_id, product_id, quantity, total_price)
+                self.order_id += 1
+                return "The order has been accepted in the system"
+            else:
+                return "The quantity requested for this product is greater than the quantity in stock"
+        else:
+            return "The product does not exist in the system"
 
     def remove_object(self, id, class_type):
 
