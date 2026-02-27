@@ -210,7 +210,7 @@ class MatamazonSystem:
             city = supplier.city
             if city not in data:
                 data[city] = []
-        data[city].append(str(order))
+            data[city].append(str(order))
         json.dump(data, out_file)
 
     """
@@ -311,7 +311,7 @@ try:
             input = line[0]
             if input == "register":
                 object = line[1]
-                if object == customer:
+                if object == "customer":
                     is_customer = True
                 else:
                     is_customer = False
@@ -335,7 +335,7 @@ try:
             elif input == "order":
                 customer_id = int(line[1])
                 product_id = int(line[2])
-                if len(input) > 3:
+                if len(line) > 3:
                     quantity = int(input[3])
                 loaded_system.place_order(customer_id, product_id, quantity)
             elif input == "remove":
@@ -344,7 +344,7 @@ try:
                 loaded_system.remove_object(class_type, id)
             elif input == "search":
                 query = line[1]
-                if len(input) > 2:
+                if len(line) > 2:
                     max_price = int(input[2])
                     loaded_system.search_objects(query, max_price)
                 else:
