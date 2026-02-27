@@ -13,18 +13,16 @@ class InvalidPriceException(Exception):
 
 
 class Customer:
-        def __init__(self, id, name, city, address):
-            if id < 0 or not isinstance(id, int):
-                raise InvalidIdException("Id is not legal")
-            self.id = id
-            self.name = name
-            self.city = city
-            self.address = address
+    def __init__(self, id, name, city, address):
+       if id < 0 or not isinstance(id, int):
+          raise InvalidIdException("Id is not legal")
+       self.id = id
+       self.name = name
+       self.city = city
+       self.address = address
 
-        def __str__(self):
-            return  f"Customer(id={self.id}, name='{self.name}', city='{self.city}', address='{self.address}')"
-
-pass
+    def __str__(self):
+       return  f"Customer(id={self.id}, name='{self.name}', city='{self.city}', address='{self.address}')"
 
 
 class Supplier:
@@ -203,7 +201,7 @@ class MatamazonSystem:
                 - Additional InvalidIdException conditions as required by specification.
         """
         # TODO implement this method as instructed
-        pass
+
 
     def search_products(self, query, max_price=None):
         result = []
@@ -264,7 +262,8 @@ class MatamazonSystem:
             if city not in data:
                 data[city] = []
             data[city].append(str(order))
-        json.dump(data, out_file)
+        with open(out_file, "w") as file:
+            json.dump(data, file)
 
     """
     Export orders in JSON format grouped by origin city.
@@ -389,7 +388,7 @@ try:
                 customer_id = int(line[1])
                 product_id = int(line[2])
                 if len(line) > 3:
-                    quantity = int(input[3])
+                    quantity = int(line[3])
                 loaded_system.place_order(customer_id, product_id, quantity)
             elif input == "remove":
                 class_type = line[1]
@@ -398,10 +397,10 @@ try:
             elif input == "search":
                 query = line[1]
                 if len(line) > 2:
-                    max_price = int(input[2])
-                    loaded_system.search_objects(query, max_price)
+                    max_price = int(line[2])
+                    loaded_system.search_products(query, max_price)
                 else:
-                    loaded_system.search_objects(query)
+                    loaded_system.search_products(query)
 
     if arguments.o:
         loaded_system.export_orders(arguments.o)
