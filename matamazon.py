@@ -2,23 +2,21 @@
 import json
 
 class Customer:
-    """
-    Represents a customer in the Matamazon system.
 
-    Required fields (per specification):
-        - id (int): Unique non-negative integer identifier.
-        - name (str): Customer name.
-        - city (str): Customer city.
-        - address (str): Customer shipping address.
+    class Customer:
+        def __init__(self, id, name, city, address):
+            if id < 0 or not isinstance(id, int):
+                raise InvalidIdException("Id is not legal")
+            self.id = id
+            self.name = name
+            self.city = city
+            self.address = address
 
-    Exceptions:
-        InvalidIdException: If 'id' is not valid according to the specification.
+            class InvalidIdException(Exception):
+                pass
 
-    Printing:
-        Must support printing in the following format (example):
-            Customer(id=42, name='Daniel Elgarici', city='Karmiel, address='123 Main Street')
-        Exact formatting requirements appear in the assignment PDF.
-    """
+        def __str__(self):
+            return f"Product(id={self.id}, name='{self.name}', city='{self.city}', address='{self.address}')"
 
     # TODO implement this class as instructed
     pass
