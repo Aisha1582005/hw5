@@ -126,27 +126,20 @@ class MatamazonSystem:
         # TODO implement this method as instructed
         pass
 
-    def add_or_update_product(self, product):
-        """
-        Add a new product or update an existing product.
+    def add_or_update_entity(self, entity):
+        if entity.id in self.products:
+            if self.products[entity.id].supplier_id != entity.supplier_id:
+                raise InvalidIdException("Suppliers does not match")
+            else:
+                self.products[entity.id].name = entity.name
+                self.products[entity.id].price = entity.price
+                self.products[entity.id].quantity = entity.quantity
+        else:
+            self.products[entity.id] = entity
 
-        Behavior:
-            - If product does not exist in system: add it.
-            - If product exists:
-                - It must belong to the same supplier as the existing one (same supplier_id),
-                  otherwise raise InvalidIdException.
-                - Update the stored product's fields according to the new product.
-
-        Args:
-            product: A Product object.
-
-        Raises:
-            InvalidIdException:
-                - If the supplier_id does not exist in the system.
-                - If attempting to update a product but supplier_id differs from the existing product.
-        """
         # TODO implement this method as instructed
-        pass
+
+    pass
 
     def place_order(self, customer_id, product_id, quantity=1):
         if customer_id not in self.customers:
@@ -155,14 +148,13 @@ class MatamazonSystem:
             if self.products[product_id].quantity >= quantity:
                 self.products[product_id].quantity -= quantity
                 total_price = self.products[product_id].price * quantity
-                self.Orders[self.order_id] =  Order(self.order_id, customer_id, product_id, quantity, total_price)
+                self.Orders[self.order_id] = Order(self.order_id, customer_id, product_id, quantity, total_price)
                 self.order_id += 1
                 return "The order has been accepted in the system"
             else:
                 return "The quantity requested for this product is greater than the quantity in stock"
         else:
             return "The product does not exist in the system"
-
 
     """
     Place an order for a product by a customer.
