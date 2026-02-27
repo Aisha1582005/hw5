@@ -9,8 +9,8 @@ class InvalidIdException(Exception):
 class InvalidPriceException(Exception):
     pass
 
-class Customer:
 
+class Customer:
     class Customer:
         def __init__(self, id, name, city, address):
             if id < 0 or not isinstance(id, int):
@@ -38,6 +38,7 @@ class Supplier:
 
     def __str__(self):
         return f"Supplier(id={self.id}, name='{self.name}', city='{self.city}', address='{self.address}')"
+
     # TODO implement this class as instructed
     pass
 
@@ -56,7 +57,6 @@ class Product:
 
     def __str__(self):
         return "Product(id={self.id}, name='{self.name}', price='{self.price}', supplier_id='{self.supplier_id}', quantity='{self.quantity}')"
-
 
     # TODO implement this class as instructed
     pass
@@ -149,48 +149,52 @@ class MatamazonSystem:
         pass
 
     def place_order(self, customer_id, product_id, quantity=1):
-    if product_id not in self.products:
-        return "The product does not exist in the system"
-    product = self.products[product_id]
-    if quantity > product.quantity:
-        return "The quantity requested for this product is greater than the quantity in stock"
-    total_price = product.price * quantity
-    order = Order(self._next_order_id, customer_id, product_id, quantity, total_price)
-    self.orders[self._next_order_id] = order
-    self._next_order_id += 1
-    product.quantity -= quantity
-    return "The order has been accepted in the system"
-        
-        """
-        Place an order for a product by a customer.
+        if customer_id not in self.customers:
+            raise InvalidIdException("Customer does not exist")
+        if product_id in self.products:
+            if self.products[product_id].quantity >= quantity:
+                self.products[product_id].quantity -= quantity
+                total_price = self.products[product_id].price * quantity
+                self.Orders[self.order_id] =  Order(self.order_id, customer_id, product_id, quantity, total_price)
+                self.order_id += 1
+                return "The order has been accepted in the system"
+            else:
+                return "The quantity requested for this product is greater than the quantity in stock"
+        else:
+            return "The product does not exist in the system"
 
-        Args:
-            customer_id (int): Customer ID.
-            product_id (int): Product ID.
-            quantity (int, optional): Quantity to order. Defaults to 1.
 
-        Returns:
-            str: Status message according to specification:
-                - "The order has been accepted in the system"
-                - "The product does not exist in the system"
-                - "The quantity requested for this product is greater than the quantity in stock"
+    """
+    Place an order for a product by a customer.
 
-        Behavior:
-            - If product does not exist: return the relevant message.
-            - If quantity requested > stock: return the relevant message.
-            - Otherwise:
-                - Decrease product stock by quantity.
-                - Create a new Order with an auto-incremented system ID (starting at 1).
-                - Store the order in the system.
-                - Return success message.
+    Args:
+        customer_id (int): Customer ID.
+        product_id (int): Product ID.
+        quantity (int, optional): Quantity to order. Defaults to 1.
 
-        Notes:
-            - The specification assumes quantity is an integer.
-        """
-        # TODO implement this method as instructed
-        pass
+    Returns:
+        str: Status message according to specification:
+            - "The order has been accepted in the system"
+            - "The product does not exist in the system"
+            - "The quantity requested for this product is greater than the quantity in stock"
 
-   def remove_object(self, _id, class_type):
+    Behavior:
+        - If product does not exist: return the relevant message.
+        - If quantity requested > stock: return the relevant message.
+        - Otherwise:
+            - Decrease product stock by quantity.
+            - Create a new Order with an auto-incremented system ID (starting at 1).
+            - Store the order in the system.
+            - Return success message.
+
+    Notes:
+        - The specification assumes quantity is an integer.
+    """
+    # TODO implement this method as instructed
+    pass
+
+
+def remove_object(self, _id, class_type):
     if not isinstance(_id, int) or _id < 0:
         raise InvalidIdException("Invalid id")
     class_type = class_type.strip()
@@ -248,30 +252,32 @@ class MatamazonSystem:
         # TODO implement this method as instructed
         pass
 
-   def search_products(self, query, max_price=None):
+
+def search_products(self, query, max_price=None):
     result = []
     for product in self.products.values():
         if product.quantity != 0 and query.lower() in product.name.lower():
             if max_price is None or product.price <= max_price:
                 result.append(product)
     return sorted(result, key=lambda p: p.price)
-        """
-        Search products by query in the product name, and optionally filter by max_price.
+    """
+    Search products by query in the product name, and optionally filter by max_price.
 
-        Args:
-            query (str): Product name or part of product name.
-            max_price (float, optional): If provided, only return products with price <= max_price.
+    Args:
+        query (str): Product name or part of product name.
+        max_price (float, optional): If provided, only return products with price <= max_price.
 
-        Returns:
-            list[Product]:
-                - Products that match the query and have quantity != 0,
-                - Sorted by ascending price.
-                - If no matching products exist, return an empty list.
-        """
-        # TODO implement this method as instructed
-        pass
+    Returns:
+        list[Product]:
+            - Products that match the query and have quantity != 0,
+            - Sorted by ascending price.
+            - If no matching products exist, return an empty list.
+    """
+    # TODO implement this method as instructed
+    pass
 
-   def export_system_to_file(self, path):
+
+def export_system_to_file(self, path):
     with open(path, "w") as f:
         for customer in self.customers.values():
             print(customer, file=f)
@@ -296,7 +302,8 @@ class MatamazonSystem:
         # TODO implement this method as instructed
         pass
 
-   def export_orders(self, out_file):
+
+def export_orders(self, out_file):
     data = {}
     for order in self.orders.values():
         product = self.products[order.product_id]
@@ -306,27 +313,27 @@ class MatamazonSystem:
             data[city] = []
         data[city].append(str(order))
     json.dump(data, out_file)
-        """
-        Export orders in JSON format grouped by origin city.
+    """
+    Export orders in JSON format grouped by origin city.
 
-        Args:
-            out_file (file-like)
+    Args:
+        out_file (file-like)
 
-        Behavior (per specification):
-            - Produce a JSON object where:
-                - Keys: origin city (supplier city) for each order.
-                - Values: list of strings representing orders (format as specified in section 4.1.4).
-            - Order lists can be in any order.
-            - No requirement on key ordering.
+    Behavior (per specification):
+        - Produce a JSON object where:
+            - Keys: origin city (supplier city) for each order.
+            - Values: list of strings representing orders (format as specified in section 4.1.4).
+        - Order lists can be in any order.
+        - No requirement on key ordering.
 
-        Raises:
-            Any exception during writing: Must be propagated to the caller.
+    Raises:
+        Any exception during writing: Must be propagated to the caller.
 
-        Notes:
-            - The order origin city is the supplier city of the ordered product.
-        """
-        # TODO implement this method as instructed
-        pass
+    Notes:
+        - The order origin city is the supplier city of the ordered product.
+    """
+    # TODO implement this method as instructed
+    pass
 
 
 def load_system_from_file(path):
