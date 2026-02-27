@@ -13,7 +13,6 @@ class InvalidPriceException(Exception):
 
 
 class Customer:
-    class Customer:
         def __init__(self, id, name, city, address):
             if id < 0 or not isinstance(id, int):
                 raise InvalidIdException("Id is not legal")
@@ -23,10 +22,9 @@ class Customer:
             self.address = address
 
         def __str__(self):
-            return f"Product(id={self.id}, name='{self.name}', city='{self.city}', address='{self.address}')"
+            return  f"Customer(id={self.id}, name='{self.name}', city='{self.city}', address='{self.address}')"
 
-    # TODO implement this class as instructed
-    pass
+pass
 
 
 class Supplier:
@@ -58,7 +56,7 @@ class Product:
         self.quantity = quantity
 
     def __str__(self):
-        return "Product(id={self.id}, name='{self.name}', price='{self.price}', supplier_id='{self.supplier_id}', quantity='{self.quantity}')"
+        return f"Product(id={self.id}, name='{self.name}', price='{self.price}', supplier_id='{self.supplier_id}', quantity='{self.quantity}')"
 
     # TODO implement this class as instructed
     pass
@@ -78,7 +76,7 @@ class Order:
         self.total_price = total_price
 
     def __str__(self):
-        return "Order({self.id}, {self.customer_id}, {self.product_id}, {self.quantity}, {self.total_price})"
+        return f"Order({self.id}, {self.customer_id}, {self.product_id}, {self.quantity}, {self.total_price})"
 
     # TODO implement this class as instructed
     pass
@@ -237,30 +235,29 @@ class MatamazonSystem:
     # TODO implement this method as instructed
     pass
 
-    def load_system_from_file(path=None):
-        system = MatamazonSystem()
-        if path is None:
-            return system
-
-        try:
-            with open(path, "r") as f:
-                for line in f:
-                    line = line.strip()
-                    if not line:
-                        continue
-                    try:
-                        obj = eval(line)
-                        if isinstance(obj, Customer):
-                            system.customers[obj.id] = obj
-                        elif isinstance(obj, Supplier):
-                            system.suppliers[obj.id] = obj
-                        elif isinstance(obj, Product):
-                            system.products[obj.id] = obj
-                    except (SyntaxError, NameError, TypeError):
-                        continue
-        except FileNotFoundError:
-            pass
+def load_system_from_file(path=None):
+    system = MatamazonSystem()
+    if path is None:
         return system
+    try:
+      with open(path, "r") as f:
+        for line in f:
+           line = line.strip()
+           if not line:
+               continue
+           try:
+              obj = eval(line)
+              if isinstance(obj, Customer):
+               system.customers[obj.id] = obj
+              elif isinstance(obj, Supplier):
+               system.suppliers[obj.id] = obj
+              elif isinstance(obj, Product):
+               system.products[obj.id] = obj
+           except (SyntaxError, NameError, TypeError):
+              continue
+    except FileNotFoundError:
+      pass
+    return system
     """
     Load a MatamazonSystem from an input file.
 
