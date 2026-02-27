@@ -102,13 +102,13 @@ class MatamazonSystem:
     """
 
     def __init__(self):
-        """
-        Initialize an empty Matamazon system.
+        def __init__(self):
+            self.customers = {}
+            self.suppliers = {}
+            self.products = {}
+            self.orders = {}
+            self.order_id = 1
 
-        Requirements:
-            - Must be parameterless.
-            - Internal collections may be chosen freely (dict/list, etc.).
-        """
         # TODO implement this method if needed
         pass
 
