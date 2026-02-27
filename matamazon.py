@@ -1,6 +1,10 @@
 # TODO add all imports needed here
 import json
 
+
+class InvalidIdException(Exception):
+    pass
+
 class Customer:
 
     class Customer:
@@ -12,9 +16,6 @@ class Customer:
             self.city = city
             self.address = address
 
-            class InvalidIdException(Exception):
-                pass
-
         def __str__(self):
             return f"Product(id={self.id}, name='{self.name}', city='{self.city}', address='{self.address}')"
 
@@ -23,23 +24,16 @@ class Customer:
 
 
 class Supplier:
-    """
-    Represents a supplier in the Matamazon system.
+    def __init__(self, id, name, city, address):
+        if id < 0 or not isinstance(id, int):
+            raise InvalidIdException("Id is illegal")
+        self.id = id
+        self.name = name
+        self.city = city
+        self.address = address
 
-    Required fields (per specification):
-        - id (int): Unique non-negative integer identifier.
-        - name (str): Supplier name.
-        - city (str): Warehouse city (origin city for shipping).
-        - address (str): Warehouse address.
-
-    Exceptions:
-        InvalidIdException: If 'id' is not valid according to the specification.
-
-    Printing:
-        Must support printing in the following format (example):
-            Supplier(id=42, name='Yinon Goldshtein', city='Haifa, address='32 David Rose Street')
-    """
-
+    def __str__(self):
+        return f"Supplier(id={self.id}, name='{self.name}', city='{self.city}', address='{self.address}')"
     # TODO implement this class as instructed
     pass
 
