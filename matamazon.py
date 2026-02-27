@@ -402,7 +402,7 @@ if __name__ == "__main__":
             elif input == "search":
                 query = line[1]
                 if len(line) > 2:
-                    max_price = int(line[2])
+                    max_price = float(line[2])
                     to_print = loaded_system.search_products(query, max_price)
                 else:
                     to_print = loaded_system.search_products(query)
