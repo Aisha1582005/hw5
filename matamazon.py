@@ -148,7 +148,7 @@ class MatamazonSystem:
             if self.products[product_id].quantity >= quantity:
                 self.products[product_id].quantity -= quantity
                 total_price = self.products[product_id].price * quantity
-                self.Orders[self.order_id] = Order(self.order_id, customer_id, product_id, quantity, total_price)
+                self.orders[self.order_id] = Order(self.order_id, customer_id, product_id, quantity, total_price)
                 self.order_id += 1
                 return "The order has been accepted in the system"
             else:
