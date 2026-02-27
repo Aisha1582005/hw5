@@ -1,5 +1,7 @@
 # TODO add all imports needed here
 import json
+import argparse
+import sys
 
 
 class InvalidIdException(Exception):
@@ -185,40 +187,40 @@ class MatamazonSystem:
     # TODO implement this method as instructed
     pass
 
+    def remove_object(self, id, class_type):
 
-def remove_object(self, _id, class_type):
-    if not isinstance(_id, int) or _id < 0:
-        raise InvalidIdException("Invalid id")
+        if not isinstance(id, int) or id < 0:
+            raise InvalidIdException("Invalid id")
     class_type = class_type.strip()
     if class_type == "Order":
-        if _id not in self.orders:
+        if id not in self.orders:
             raise InvalidIdException("Order does not exist")
-        order = self.orders[_id]
+        order = self.orders[id]
         product = self.products[order.product_id]
         product.quantity += order.quantity
-        del self.orders[_id]
+        del self.orders[id]
         return order.quantity
     elif class_type == "Product":
-        if _id not in self.products:
+        if id not in self.products:
             raise InvalidIdException("Product does not exist")
         for order in self.orders.values():
-            if order.product_id == _id:
+            if order.product_id == id:
                 raise InvalidIdException("Product has dependent orders")
-        del self.products[_id]
+        del self.products[id]
     elif class_type == "Customer":
-        if _id not in self.customers:
+        if id not in self.customers:
             raise InvalidIdException("Customer does not exist")
         for order in self.orders.values():
-            if order.customer_id == _id:
+            if order.customer_id == id:
                 raise InvalidIdException("Customer has dependent orders")
         del self.customers[_id]
     elif class_type == "Supplier":
-        if _id not in self.suppliers:
+        if id not in self.suppliers:
             raise InvalidIdException("Supplier does not exist")
         for product in self.products.values():
-            if product.supplier_id == _id:
+            if product.supplier_id == id:
                 raise InvalidIdException("Supplier has dependent products")
-        del self.suppliers[_id]
+        del self.suppliers[id]
     else:
         raise InvalidIdException("Invalid class type")
         """
@@ -244,14 +246,14 @@ def remove_object(self, _id, class_type):
         # TODO implement this method as instructed
         pass
 
+    def search_products(self, query, max_price=None):
 
-def search_products(self, query, max_price=None):
-    result = []
+        result = []
     for product in self.products.values():
         if product.quantity != 0 and query.lower() in product.name.lower():
             if max_price is None or product.price <= max_price:
                 result.append(product)
-    return sorted(result, key=lambda p: p.price)
+          return sorted(result, key=lambda p: p.price)
     """
     Search products by query in the product name, and optionally filter by max_price.
 
@@ -268,35 +270,35 @@ def search_products(self, query, max_price=None):
     # TODO implement this method as instructed
     pass
 
+    def export_system_to_file(self, path):
 
-def export_system_to_file(self, path):
-    with open(path, "w") as f:
-        for customer in self.customers.values():
-            print(customer, file=f)
-        for supplier in self.suppliers.values():
-            print(supplier, file=f)
-        for product in self.products.values():
-            print(product, file=f)
-        """
-        Export system state (customers, suppliers, products) to a text file.
+        with open(path, "w") as f:
+            for customer in self.customers.values():
+                print(customer, file=f)
+            for supplier in self.suppliers.values():
+                print(supplier, file=f)
+            for product in self.products.values():
+                print(product, file=f)
+            """
+            Export system state (customers, suppliers, products) to a text file.
+    
+            Args:
+                path (str): Output file path.
+    
+            Behavior:
+                - Write each object on its own line, using the object's print/str representation.
+                - Orders must NOT be included.
+                - No constraint on the ordering of objects in the output.
+    
+            Raises:
+                OSError (or any file-open exception): Must be propagated to the caller.
+            """
+            # TODO implement this method as instructed
+            pass
 
-        Args:
-            path (str): Output file path.
+    def export_orders(self, out_file):
 
-        Behavior:
-            - Write each object on its own line, using the object's print/str representation.
-            - Orders must NOT be included.
-            - No constraint on the ordering of objects in the output.
-
-        Raises:
-            OSError (or any file-open exception): Must be propagated to the caller.
-        """
-        # TODO implement this method as instructed
-        pass
-
-
-def export_orders(self, out_file):
-    data = {}
+        data = {}
     for order in self.orders.values():
         product = self.products[order.product_id]
         supplier = self.suppliers[product.supplier_id]
@@ -368,4 +370,82 @@ def load_system_from_file(path):
     # TODO implement this function as instructed
     pass
 
+    pass
+
+
 # TODO all the main part here
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("-l", required=True)
+    parser.add_argument("-s", required=False)
+    parser.add_argument("-o", required=False)
+    parser.add_argument("-os", required=False)
+    try:
+        arguments = parser.parse_args()
+    except:
+        print("Usage: python3 matamazon.py -l < matamazon_log > -s < matamazon_system > -o "
+              "<output_file> -os <out_matamazon_system>", file=sys.stderr)
+        sys.exit(1)
+try:
+    if arguments.s:
+        loaded_system = load_system_from_file(arguments.s)
+    else:
+        loaded_system = load_system_from_file()
+
+    with open(arguments.l, "r") as log:
+        for line in log:
+            line = line.strip()
+            if not line:
+                continue
+            line = line.split()
+            input = line[0]
+            if input == "register":
+                object = line[1]
+                if object == customer:
+                    is_customer = True
+                else:
+                    is_customer = False
+                id = int(line[2])
+                name = line[3].replace("_", " ")
+                city = line[4].replace("_", " ")
+                address = line[5].replace("_", " ")
+                if is_customer:
+                    entity = Customer(id, name, city, address)
+                else:
+                    entity = Supplier(id, name, city, address)
+                loaded_system.register_entity(entity, is_customer)
+            elif input == "add" or input == "update":
+                id = int(line[1])
+                name = line[2].replace("_", " ")
+                price = float(line[3])
+                supplier_id = int(line[4])
+                quantity = int(line[5])
+                product = Product(id, name, price, supplier_id, quantity)
+                loaded_system.add_or_update_entity(product)
+            elif input == "order":
+                customer_id = int(line[1])
+                product_id = int(line[2])
+                if len(input) > 3:
+                    quantity = int(input[3])
+                loaded_system.place_order(customer_id, product_id, quantity)
+            elif input == "remove":
+                class_type = line[1]
+                id = int(line[2])
+                loaded_system.remove_object(class_type, id)
+            elif input == "search":
+                query = line[1]
+                if len(input) > 2:
+                    max_price = int(input[2])
+                    loaded_system.search_objects(query, max_price)
+                else:
+                    loaded_system.search_objects(query)
+
+    if arguments.o:
+           loaded_system.export_orders(arguments.o)
+
+    if arguments.os:
+         loaded_system.export_system_to_file(arguments.os)
+
+except:
+    print("The matamazon script has encountered an error", file=sys.stderr)
+    sys.exit(1)
