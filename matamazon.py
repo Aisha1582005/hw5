@@ -417,6 +417,6 @@ if __name__ == "__main__":
       if arguments.os:
            loaded_system.export_system_to_file(arguments.os)
 
-    except Exception as e:
-       print("The matamazon script has encountered an error",e, file=sys.stderr)
+    except Exception:
+       print("The matamazon script has encountered an error", file=sys.stderr)
        sys.exit(0)
