@@ -45,7 +45,7 @@ class Product:
     def __init__(self, id, name, price, supplier_id, quantity):
         if id < 0 or not isinstance(id, int) or not isinstance(supplier_id, int) or supplier_id < 0:
             raise InvalidIdException("Id is not legal")
-        if price < 0 or not isinstance(total_price, (int, float)):
+        if price < 0:
             raise InvalidPriceException("price is negative")
         self.id = id
         self.name = name
@@ -65,7 +65,7 @@ class Order:
         if (id < 0 or not isinstance(id, int) or not isinstance(customer_id, int) or
                 not isinstance(product_id, int) or customer_id < 0 or product_id < 0):
             raise InvalidIdException("Id is not legal")
-        if total_price < 0 or not isinstance(total_price, (int, float)):
+        if total_price < 0:
             raise InvalidPriceException("price is negative")
         self.id = id
         self.customer_id = customer_id
